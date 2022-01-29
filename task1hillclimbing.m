@@ -76,8 +76,8 @@ sol= ones(1,nFlows);
 Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
 maxLoad= max(max(Loads(:,3:4)));
 %
-%Optimization algorithm resorting to the greedy strategy:
-fprintf("\nOptimization algorithm resorting to the greedy strategy\n")
+%Optimization algorithm resorting to the  multi start hill climbing algorithm:
+fprintf("\nOptimization algorithm resorting to the  multi start hill climbing algorithm\n")
 %Using all possible routing paths.
 t= tic;
 bestLoad= inf;

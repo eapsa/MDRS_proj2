@@ -76,41 +76,63 @@ sol= ones(1,nFlows);
 Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
 maxLoad= max(max(Loads(:,3:4)));
 %
-%Optimization algorithm resorting to the random strategy.
-fprintf("\nOptimization algorithm resorting to the random strategy\n")
+%Optimization algorithm resorting to the greedy strategy:
+fprintf("\nOptimization algorithm resorting to the greedy strategy\n")
 %Using all possible routing paths.
 t= tic;
 bestEnergy= inf;
 sol= zeros(1,nFlows);
 allValues= [];
 while toc(t)<10
-    for i= 1:nFlows
-        sol(i)= randi(nSP(i));
+    ax2= randperm(nFlows);
+    sol= zeros(1,nFlows);
+    for i= ax2
+         k_best= 0;
+         best= inf;
+         for k= 1:nSP(i)
+              sol(i)= k;
+              Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+              load= max(max(Loads(:,3:4)));
+              if load <= 10
+                  energy = 0;
+                  for a=1:nLinks
+                      if(Loads(a,3)+Loads(a,4)>0)
+                          energy = energy + L(Loads(a,1),Loads(a,2));
+                      end
+                  end
+              else
+                  energy = inf;
+              end
+              if energy<best
+                   k_best= k;
+                   best= energy;
+              end
+         end
+         sol(i)= k_best;
     end
     Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
     load= max(max(Loads(:,3:4)));
     if load <= 10
-        energy = 0;
-        for a=1:nLinks
-            if(Loads(a,3)+Loads(a,4)>0)
-                energy = energy + L(Loads(a,1),Loads(a,2));
-            end
-        end
-        allValues= [allValues energy];
+      energy = 0;
+      for a=1:nLinks
+          if(Loads(a,3)+Loads(a,4)>0)
+              energy = energy + L(Loads(a,1),Loads(a,2));
+          end
+      end
+      allValues= [allValues energy];
     else
-        energy = inf;
+      energy = inf;
     end
     if energy<bestEnergy
         bestSol= sol;
         bestEnergy= energy;
     end
 end
-figure(1);
+hold on
 plot(sort(allValues));
 fprintf("\nUsing all possible routing paths\n")
 fprintf('   Best Energy = %.2f\n',bestEnergy);
 fprintf('   No. of solutions = %d\n',length(allValues));
-allValues = allValues(allValues~=inf);
 fprintf('   Av. quality of solutions = %.2f\n',mean(allValues));
 
 %using the 10 shortest routing paths
@@ -119,22 +141,45 @@ bestEnergy= inf;
 sol= zeros(1,nFlows);
 allValues= [];
 while toc(t)<10
-    for i= 1:nFlows
-        n = min(10,nSP(i));
-        sol(i)= randi(n);
+    ax2= randperm(nFlows);
+    sol= zeros(1,nFlows);
+    for i= ax2
+         k_best= 0;
+         best= inf;
+         n = min(10,nSP(i));
+         for k= 1:n
+              sol(i)= k;
+              Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+              load= max(max(Loads(:,3:4)));
+              if load <= 10
+                  energy = 0;
+                  for a=1:nLinks
+                      if(Loads(a,3)+Loads(a,4)>0)
+                          energy = energy + L(Loads(a,1),Loads(a,2));
+                      end
+                  end
+              else
+                  energy = inf;
+              end
+              if energy<best
+                   k_best= k;
+                   best= energy;
+              end
+         end
+         sol(i)= k_best;
     end
     Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
     load= max(max(Loads(:,3:4)));
     if load <= 10
-        energy = 0;
-        for a=1:nLinks
-            if(Loads(a,3)+Loads(a,4)>0)
-                energy = energy + L(Loads(a,1),Loads(a,2));
-            end
-        end
-        allValues= [allValues energy];
+      energy = 0;
+      for a=1:nLinks
+          if(Loads(a,3)+Loads(a,4)>0)
+              energy = energy + L(Loads(a,1),Loads(a,2));
+          end
+      end
+      allValues= [allValues energy];
     else
-        energy = inf;
+      energy = inf;
     end
     if energy<bestEnergy
         bestSol= sol;
@@ -146,7 +191,6 @@ plot(sort(allValues));
 fprintf("\nUsing the 10 shortest routing paths\n")
 fprintf('   Best Energy = %.2f\n',bestEnergy);
 fprintf('   No. of solutions = %d\n',length(allValues));
-allValues = allValues(allValues~=inf);
 fprintf('   Av. quality of solutions = %.2f\n',mean(allValues));
 
 %using the 5 shortest routing paths
@@ -155,22 +199,45 @@ bestEnergy= inf;
 sol= zeros(1,nFlows);
 allValues= [];
 while toc(t)<10
-    for i= 1:nFlows
-        n = min(5,nSP(i));
-        sol(i)= randi(n);
+    ax2= randperm(nFlows);
+    sol= zeros(1,nFlows);
+    for i= ax2
+         k_best= 0;
+         best= inf;
+         n = min(5,nSP(i));
+         for k= 1:n
+              sol(i)= k;
+              Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+              load= max(max(Loads(:,3:4)));
+              if load <= 10
+                  energy = 0;
+                  for a=1:nLinks
+                      if(Loads(a,3)+Loads(a,4)>0)
+                          energy = energy + L(Loads(a,1),Loads(a,2));
+                      end
+                  end
+              else
+                  energy = inf;
+              end
+              if energy<best
+                   k_best= k;
+                   best= energy;
+              end
+         end
+         sol(i)= k_best;
     end
     Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
     load= max(max(Loads(:,3:4)));
     if load <= 10
-        energy = 0;
-        for a=1:nLinks
-            if(Loads(a,3)+Loads(a,4)>0)
-                energy = energy + L(Loads(a,1),Loads(a,2));
-            end
-        end
-        allValues= [allValues energy];
+      energy = 0;
+      for a=1:nLinks
+          if(Loads(a,3)+Loads(a,4)>0)
+              energy = energy + L(Loads(a,1),Loads(a,2));
+          end
+      end
+      allValues= [allValues energy];
     else
-        energy = inf;
+      energy = inf;
     end
     if energy<bestEnergy
         bestSol= sol;
@@ -183,5 +250,4 @@ legend("all","10 shortest","5 shortest");
 fprintf("\nUsing the 5 shortest routing paths\n")
 fprintf('   Best Energy = %.2f\n',bestEnergy);
 fprintf('   No. of solutions = %d\n',length(allValues));
-allValues = allValues(allValues~=inf);
 fprintf('   Av. quality of solutions = %.2f\n',mean(allValues));
