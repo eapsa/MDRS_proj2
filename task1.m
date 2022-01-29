@@ -70,3 +70,84 @@ n= inf;
 for i=1:nFlows
     fprintf("[%d,%d] has %d diferente routing paths \n",T(i,1),T(i,2),nSP(i));
 end
+
+%Compute the link loads using the first (shortest) path of each flow:
+sol= ones(1,nFlows);
+Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+maxLoad= max(max(Loads(:,3:4)));
+%
+%Optimization algorithm resorting to the random strategy.
+fprintf("Optimization algorithm resorting to the random strategy\n")
+%Using all possible routing paths.
+t= tic;
+bestLoad= inf;
+sol= zeros(1,nFlows);
+allValues= [];
+while toc(t)<10
+    for i= 1:nFlows
+        sol(i)= randi(nSP(i));
+    end
+    Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+    load= max(max(Loads(:,3:4)));
+    allValues= [allValues load];
+    if load<bestLoad
+        bestSol= sol;
+        bestLoad= load;
+    end
+end
+figure(1);
+plot(sort(allValues));
+fprintf("Using all possible routing paths\n")
+bestSol
+bestLoad
+
+%Optimization algorithm resorting to the random strategy:
+%using the 10 shortest routing paths
+t= tic;
+bestLoad= inf;
+sol= zeros(1,nFlows);
+allValues= [];
+while toc(t)<10
+    for i= 1:nFlows
+        n = min(10,nSP(i));
+        sol(i)= randi(n);
+    end
+    Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+    load= max(max(Loads(:,3:4)));
+    allValues= [allValues load];
+    if load<bestLoad
+        bestSol= sol;
+        bestLoad= load;
+    end
+end
+hold on
+plot(sort(allValues));
+fprintf("Using the 10 shortest routing paths\n")
+bestSol
+bestLoad
+
+%Optimization algorithm resorting to the random strategy:
+%using the 5 shortest routing paths
+t= tic;
+bestLoad= inf;
+sol= zeros(1,nFlows);
+allValues= [];
+while toc(t)<10
+    for i= 1:nFlows
+        n = min(5,nSP(i));
+        sol(i)= randi(n);
+    end
+    Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+    load= max(max(Loads(:,3:4)));
+    allValues= [allValues load];
+    if load<bestLoad
+        bestSol= sol;
+        bestLoad= load;
+    end
+end
+hold on
+plot(sort(allValues));
+legend("all","10 shortest","5 shortest");
+fprintf("Using the 5 shortest routing paths\n")
+bestSol
+bestLoad
