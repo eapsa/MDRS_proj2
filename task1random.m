@@ -77,7 +77,7 @@ Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
 maxLoad= max(max(Loads(:,3:4)));
 %
 %Optimization algorithm resorting to the random strategy.
-fprintf("Optimization algorithm resorting to the random strategy\n")
+fprintf("\nOptimization algorithm resorting to the random strategy\n")
 %Using all possible routing paths.
 t= tic;
 bestLoad= inf;
@@ -97,11 +97,11 @@ while toc(t)<10
 end
 figure(1);
 plot(sort(allValues));
-fprintf("Using all possible routing paths\n")
-bestSol
-bestLoad
+fprintf("\nUsing all possible routing paths\n")
+fprintf('   Best load = %.2f Gbps\n',bestLoad);
+fprintf('   No. of solutions = %d\n',length(allValues));
+fprintf('   Av. quality of solutions = %.2f Gbps\n',mean(allValues));
 
-%Optimization algorithm resorting to the random strategy:
 %using the 10 shortest routing paths
 t= tic;
 bestLoad= inf;
@@ -122,11 +122,11 @@ while toc(t)<10
 end
 hold on
 plot(sort(allValues));
-fprintf("Using the 10 shortest routing paths\n")
-bestSol
-bestLoad
+fprintf("\nUsing the 10 shortest routing paths\n")
+fprintf('   Best load = %.2f Gbps\n',bestLoad);
+fprintf('   No. of solutions = %d\n',length(allValues));
+fprintf('   Av. quality of solutions = %.2f Gbps\n',mean(allValues));
 
-%Optimization algorithm resorting to the random strategy:
 %using the 5 shortest routing paths
 t= tic;
 bestLoad= inf;
@@ -148,6 +148,7 @@ end
 hold on
 plot(sort(allValues));
 legend("all","10 shortest","5 shortest");
-fprintf("Using the 5 shortest routing paths\n")
-bestSol
-bestLoad
+fprintf("\nUsing the 5 shortest routing paths\n")
+fprintf('   Best load = %.2f Gbps\n',bestLoad);
+fprintf('   No. of solutions = %d\n',length(allValues));
+fprintf('   Av. quality of solutions = %.2f Gbps\n',mean(allValues));
