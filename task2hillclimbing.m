@@ -76,8 +76,8 @@ sol= ones(1,nFlows);
 Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
 maxLoad= max(max(Loads(:,3:4)));
 %
-%Optimization algorithm resorting to the greedy strategy:
-fprintf("\nOptimization algorithm resorting to the greedy strategy\n")
+%Optimization algorithm resorting to the  multi start hill climbing algorithm:
+fprintf("\nOptimization algorithm resorting to the  multi start hill climbing algorithm\n")
 %Using all possible routing paths.
 t= tic;
 bestEnergy= inf;
@@ -111,6 +111,46 @@ while toc(t)<10
          sol(i)= k_best;
     end
     energy = best;
+
+    %HILL CLIMBING:
+    continuar= true;
+    while continuar
+        i_best= 0;
+        k_best= 0;
+        best= energy;
+        for i= 1:nFlows
+            for k= 1:nSP(i)
+                if k~=sol(i)
+                    aux= sol(i);
+                    sol(i)= k;
+                    Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+                    load1= max(max(Loads(:,3:4)));
+                    if load1 <= 10
+                        energy1= 0;
+                        for a= 1:nLinks
+                            if Loads(a,3)+Loads(a,4)>0
+                                energy1= energy1 + L(Loads(a,1),Loads(a,2));
+                            end
+                        end
+                    else
+                        energy1= inf;
+                    end
+                    if energy1<best
+                        i_best= i;
+                        k_best= k;
+                        best= energy1;
+                    end
+                    sol(i)= aux;
+                end
+            end
+        end
+        if i_best>0
+            sol(i_best)= k_best;
+            energy= best;
+        else
+            continuar= false;
+        end
+    end    
     allValues= [allValues energy];
     if energy<bestEnergy
         bestSol= sol;
@@ -158,6 +198,47 @@ while toc(t)<10
          sol(i)= k_best;
     end
     energy = best;
+
+    %HILL CLIMBING:
+    continuar= true;
+    while continuar
+        i_best= 0;
+        k_best= 0;
+        best= energy;
+        for i= 1:nFlows
+            n = min(10,nSP(i));
+            for k= 1:n
+                if k~=sol(i)
+                    aux= sol(i);
+                    sol(i)= k;
+                    Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+                    load1= max(max(Loads(:,3:4)));
+                    if load1 <= 10
+                        energy1= 0;
+                        for a= 1:nLinks
+                            if Loads(a,3)+Loads(a,4)>0
+                                energy1= energy1 + L(Loads(a,1),Loads(a,2));
+                            end
+                        end
+                    else
+                        energy1= inf;
+                    end
+                    if energy1<best
+                        i_best= i;
+                        k_best= k;
+                        best= energy1;
+                    end
+                    sol(i)= aux;
+                end
+            end
+        end
+        if i_best>0
+            sol(i_best)= k_best;
+            energy= best;
+        else
+            continuar= false;
+        end
+    end    
     allValues= [allValues energy];
     if energy<bestEnergy
         bestSol= sol;
@@ -205,6 +286,47 @@ while toc(t)<10
          sol(i)= k_best;
     end
     energy = best;
+
+    %HILL CLIMBING:
+    continuar= true;
+    while continuar
+        i_best= 0;
+        k_best= 0;
+        best= energy;
+        for i= 1:nFlows
+            n = min(5,nSP(i));
+            for k= 1:n
+                if k~=sol(i)
+                    aux= sol(i);
+                    sol(i)= k;
+                    Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+                    load1= max(max(Loads(:,3:4)));
+                    if load1 <= 10
+                        energy1= 0;
+                        for a= 1:nLinks
+                            if Loads(a,3)+Loads(a,4)>0
+                                energy1= energy1 + L(Loads(a,1),Loads(a,2));
+                            end
+                        end
+                    else
+                        energy1= inf;
+                    end
+                    if energy1<best
+                        i_best= i;
+                        k_best= k;
+                        best= energy1;
+                    end
+                    sol(i)= aux;
+                end
+            end
+        end
+        if i_best>0
+            sol(i_best)= k_best;
+            energy= best;
+        else
+            continuar= false;
+        end
+    end    
     allValues= [allValues energy];
     if energy<bestEnergy
         bestSol= sol;
