@@ -63,11 +63,10 @@ for i=1:nLinks
 end
 L= round(L);  %Km
 
-% Compute up to 100 paths for each flow:
-n= 100;
+% Compute up to all paths for each flow:
+n= inf;
 [sP nSP]= calculatePaths(L,T,n);
 
-%Compute the link loads using the first (shortest) path of each flow:
-sol= ones(1,nFlows);
-Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
-maxLoad= max(max(Loads(:,3:4)))
+for i=1:nFlows
+    fprintf("[%d,%d] has %d diferente routing paths \n",T(i,1),T(i,2),nSP(i));
+end
