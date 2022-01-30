@@ -72,7 +72,14 @@ logA = -log(A);
 %n= 100;
 [sP nSP sP2 nSP2]= calculateAvailability(logA,T,1);
 
+%for i=1:nFlows
+%    disp(['Most available path is: [' num2str(sP{i}{1}(:).') ']']);
+%    fprintf('Availability of the path = %.5f%%\n\n',nSP(i)*100);
+%end
+
 for i=1:nFlows
     disp(['Most available path is: [' num2str(sP{i}{1}(:).') ']']);
-    fprintf('Availability of the path = %.5f%%\n\n',nSP(i)*100);
+    fprintf('\tAvailability of the path = %.5f%%\n',nSP(i)*100);
+    disp(['Second most available path is: [' num2str(sP2{i}{1}(:).') ']']);
+    fprintf('\tAvailability of the path = %.5f%%\n\n',nSP2(i)*100);
 end
