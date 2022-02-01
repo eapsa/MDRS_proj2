@@ -80,7 +80,7 @@ for i=1:nFlows
     end
 end
 
-fprintf("\nOptimization algorithm resorting to the  multi start hill climbing algorithm\n")
+fprintf("\nMulti start hill climbing\n")
 %Using all possible routing paths.
 t= tic;
 bestLoad= inf;
@@ -148,5 +148,6 @@ for i=1:nFlows
     disp(['[' num2str(sP1{i}{bestSol(i)}(:).') '] [' num2str(sP2{i}{bestSol(i)}(:).') '] -> ' num2str(nSP{i}(bestSol(i)),'%f') ]);
 end
 sumAvai= sumAvai/nFlows;
-fprintf('\n Average service availability: %f\n\n',sumAvai);
-fprintf('   Best load = %.2f\n',bestLoad);
+fprintf('\nAverage service availability: %f\n',sumAvai);
+fprintf('Best load = %.2f\n',bestLoad);
+fprintf('No. of solutions = %d\n',length(allValues));
