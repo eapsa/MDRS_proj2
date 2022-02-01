@@ -70,7 +70,7 @@ logA = -log(A);
 %
 % Compute up to 100 paths for each flow:
 %n= 100;
-[sP nSP sP2 nSP2]= calculateAvailability(logA,T,1);
+[sP1 nSP1 sP2 nSP2]= calculateAvailability(logA,T,1);
 
 %for i=1:nFlows
 %    disp(['Most available path is: [' num2str(sP{i}{1}(:).') ']']);
@@ -78,8 +78,34 @@ logA = -log(A);
 %end
 
 for i=1:nFlows
-    disp(['Most available path is: [' num2str(sP{i}{1}(:).') ']']);
-    fprintf('\tAvailability of the path = %.5f%%\n',nSP(i)*100);
+    disp(['Most available path is: [' num2str(sP1{i}{1}(:).') ']']);
+    fprintf('\tAvailability of the path = %.5f%%\n',nSP1(i)*100);
     disp(['Second most available path is: [' num2str(sP2{i}{1}(:).') ']']);
     fprintf('\tAvailability of the path = %.5f%%\n\n',nSP2(i)*100);
 end
+
+Loads= calculateLinkLoads1plus1(nNodes,Links,T,sP1,sP2)
+totalLoad= sum(sum(Loads(:,3:4)))
+
+fprintf('Links do not have enough capacity:\n')
+for i=1:length(Loads(:,3))
+    if(Loads(i,3)>10)
+        disp(Loads(i,1:3));
+    end
+    if(Loads(i,4)>10)
+        disp(Loads(i,[1:2 4]));
+    end
+end
+
+Loads= calculateLinkLoads1to1(nNodes,Links,T,sP1,sP2)
+totalLoad= sum(sum(Loads(:,3:4)))
+
+fprintf('Links do not have enough capacity:\n')
+for i=1:length(Loads(:,3))
+    if(Loads(i,3)>10 || Loads(i,4)>10)
+        disp(Loads(i,:));
+    end
+end
+
+fprintf('\nThe highest bandwidth value required among all links: %.4f\n',max(Loads(:,3:4), [], 'all'));
+
