@@ -76,7 +76,7 @@ for i=1:nFlows
     fprintf('\nFlow %d\n',i);
     for k=1:n
         avai = 1-((1-nSP1{i}{k})*(1-nSP2{i}{k})); 
-        disp(['[' num2str(sP1{i}{k}(:).') '] [' num2str(sP2{i}{k}(:).') '] -> ' num2str(avai,'%f') ]);
+        disp(['[' num2str(sP1{i}{k}(:).') ']' 9 ' [' num2str(sP2{i}{k}(:).') '] -> ' num2str(nSP2{i}{k}(:).')]);
     end
 end
 
