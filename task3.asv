@@ -79,9 +79,11 @@ logA = -log(A);
 
 for i=1:nFlows
     disp(['Most available path is: [' num2str(sP1{i}{1}(:).') ']']);
-    fprintf('\tAvailability of the path = %.5f%%\n',nSP1(i)*100);
+    %fprintf('\tAvailability of the path = %.5f%%\n',nSP1(i)*100);
     disp(['Second most available path is: [' num2str(sP2{i}{1}(:).') ']']);
-    fprintf('\tAvailability of the path = %.5f%%\n\n',nSP2(i)*100);
+    %fprintf('\tAvailability of the path = %.5f%%\n\n',nSP2(i)*100);
+    avai = 1-((1-nSP1(i))*(1-nSP2(i)));
+    fprintf('\tAvailability of the pair = %f%%\n\n',avai);
 end
 
 Loads= calculateLinkLoads1plus1(nNodes,Links,T,sP1,sP2)
@@ -97,9 +99,6 @@ for i=1:length(Loads(:,3))
     end
 end
 
-find(Loads(:,3:4))
-
-
 Loads= calculateLinkLoads1to1(nNodes,Links,T,sP1,sP2)
 totalLoad= sum(sum(Loads(:,3:4)))
 
@@ -110,5 +109,5 @@ for i=1:length(Loads(:,3))
     end
 end
 
-max(Loads(:,3:4))
+fprintf('\nThe highest bandwidth value required among all links: %.4f\n',max(Loads(:,3:4), [], 'all'));
 

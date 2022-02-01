@@ -77,12 +77,20 @@ logA = -log(A);
 %    fprintf('Availability of the path = %.5f%%\n\n',nSP(i)*100);
 %end
 
+sumAvai = 0;
 for i=1:nFlows
     disp(['Most available path is: [' num2str(sP1{i}{1}(:).') ']']);
-    fprintf('\tAvailability of the path = %.5f%%\n',nSP1(i)*100);
+    %fprintf('\tAvailability of the path = %.5f%%\n',nSP1(i)*100);
     disp(['Second most available path is: [' num2str(sP2{i}{1}(:).') ']']);
-    fprintf('\tAvailability of the path = %.5f%%\n\n',nSP2(i)*100);
+    %fprintf('\tAvailability of the path = %.5f%%\n\n',nSP2(i)*100);
+    avai = 1-((1-nSP1(i))*(1-nSP2(i)));
+    sumAvai = sumAvai + avai;
+    fprintf('\tAvailability of the pair = %f\n\n',avai);
 end
+sumAvai= sumAvai/nFlows;
+fprintf('\n Average service availability: %f\n\n',sumAvai);
+
+% EX 3c)
 
 Loads= calculateLinkLoads1plus1(nNodes,Links,T,sP1,sP2)
 totalLoad= sum(sum(Loads(:,3:4)))
@@ -96,6 +104,8 @@ for i=1:length(Loads(:,3))
         disp(Loads(i,[1:2 4]));
     end
 end
+
+% EX 3d)
 
 Loads= calculateLinkLoads1to1(nNodes,Links,T,sP1,sP2)
 totalLoad= sum(sum(Loads(:,3:4)))

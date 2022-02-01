@@ -1,4 +1,4 @@
-function [sP nSP sP2 nSP2]= calculateAvailable(L,T,n)
+function [sP nSP sP2 nSP2]= calculateAvailability(L,T,n)
     nFlows= size(T,1);
     nSP= zeros(1,nFlows);
     nSP2= zeros(1,nFlows);
