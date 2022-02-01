@@ -99,6 +99,7 @@ while toc(t)<10
                     energy = energy + L(Loads(a,1),Loads(a,2));
                 end
             end
+ 
         else
             energy = inf;
             continuar= true;
@@ -165,28 +166,23 @@ bestEnergy= inf;
 sol= zeros(1,nFlows);
 allValues= [];
 while toc(t)<10
-    continuar= true;
-    while continuar
-        continuar= false;
-        for i= 1:nFlows
-            n = min(5,nSP(i));
-            sol(i)= randi(n);
-        end
-        Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
-        load= max(max(Loads(:,3:4)));
-        if load <= 10
-            energy = 0;
-            for a=1:nLinks
-                if(Loads(a,3)+Loads(a,4)>0)
-                    energy = energy + L(Loads(a,1),Loads(a,2));
-                end
-            end
-        else
-            energy = inf;
-            continuar= true;
-        end
+    for i= 1:nFlows
+        n = min(5,nSP(i));
+        sol(i)= randi(n);
     end
-    allValues= [allValues energy];
+    Loads= calculateLinkLoads(nNodes,Links,T,sP,sol);
+    load= max(max(Loads(:,3:4)));
+    if load <= 10
+        energy = 0;
+        for a=1:nLinks
+            if(Loads(a,3)+Loads(a,4)>0)
+                energy = energy + L(Loads(a,1),Loads(a,2));
+            end
+        end
+        allValues= [allValues energy];
+    else
+        energy = inf;
+    end
     if energy<bestEnergy
         bestSol= sol;
         bestEnergy= energy;
