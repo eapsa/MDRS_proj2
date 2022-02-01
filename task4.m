@@ -79,10 +79,6 @@ for i=1:nFlows
         disp(['[' num2str(sP1{i}{k}(:).') '] [' num2str(sP2{i}{k}(:).') '] -> ' num2str(nSP{i}(k),'%f') ]);
     end
 end
-sol= zeros(1,nFlows);
-
-Loads= calculateLinkLoads1to1Sol(nNodes,Links,T,sP1,sP2,sol)
-
 
 fprintf("\nOptimization algorithm resorting to the  multi start hill climbing algorithm\n")
 %Using all possible routing paths.
@@ -144,10 +140,9 @@ while toc(t)<30
         bestLoad= load;
     end
 end
-Loads
+
 sumAvai = 0;
 for i=1:nFlows
-    fprintf('\nFlow %d\n',i);
     nSP{i}(sol(i)) = 1-((1-nSP1{i}{sol(i)})*(1-nSP2{i}{sol(i)}));
     sumAvai = sumAvai + nSP{i}(k);
     disp(['[' num2str(sP1{i}{sol(i)}(:).') '] [' num2str(sP2{i}{sol(i)}(:).') '] -> ' num2str(nSP{i}(sol(i)),'%f') ]);
