@@ -75,8 +75,83 @@ tab = '\t'
 for i=1:nFlows
     fprintf('\nFlow %d\n',i);
     for k=1:n
-        avai = 1-((1-nSP1{i}{k})*(1-nSP2{i}{k})); 
-        disp(['[' num2str(sP1{i}{k}(:).') '] [' num2str(sP2{i}{k}(:).') '] -> ' num2str(avai,'%f') ]);
+        nSP{i}(k) = 1-((1-nSP1{i}{k})*(1-nSP2{i}{k}));
+        disp(['[' num2str(sP1{i}{k}(:).') '] [' num2str(sP2{i}{k}(:).') '] -> ' num2str(nSP{i}(k),'%f') ]);
     end
 end
+sol= zeros(1,nFlows);
 
+Loads= calculateLinkLoads1to1Sol(nNodes,Links,T,sP1,sP2,sol)
+
+
+fprintf("\nOptimization algorithm resorting to the  multi start hill climbing algorithm\n")
+%Using all possible routing paths.
+t= tic;
+bestLoad= inf;
+sol= zeros(1,nFlows);
+allValues= [];
+while toc(t)<30
+    ax2= randperm(nFlows);
+    sol= zeros(1,nFlows);
+    for i= ax2
+         k_best= 0;
+         best= inf;
+         for k= 1:10
+              sol(i)= k;
+              Loads= calculateLinkLoads1to1Sol(nNodes,Links,T,sP1,sP2,sol);
+              load= max(max(Loads(:,3:4)));
+              if load<best
+                   k_best= k;
+                   best= load;
+              end
+         end
+         sol(i)= k_best;
+    end
+    load = best;
+
+    %HILL CLIMBING:
+    continuar= true;
+    while continuar
+        i_best= 0;
+        k_best= 0;
+        best= load;
+        for i= 1:nFlows
+            for k= 1:10
+                if k~=sol(i)
+                    aux= sol(i);
+                    sol(i)= k;
+                    Loads= calculateLinkLoads1to1Sol(nNodes,Links,T,sP1,sP2,sol);
+                    load1= max(max(Loads(:,3:4)));
+                    if load1<best
+                        i_best= i;
+                        k_best= k;
+                        best= load1;
+                    end
+                    sol(i)= aux;
+                end
+            end
+        end
+        if i_best>0
+            sol(i_best)= k_best;
+            load= best;
+        else
+            continuar= false;
+        end
+    end
+    allValues= [allValues load];
+    if load<bestLoad
+        bestSol= sol;
+        bestLoad= load;
+    end
+end
+Loads
+sumAvai = 0;
+for i=1:nFlows
+    fprintf('\nFlow %d\n',i);
+    nSP{i}(sol(i)) = 1-((1-nSP1{i}{sol(i)})*(1-nSP2{i}{sol(i)}));
+    sumAvai = sumAvai + nSP{i}(k);
+    disp(['[' num2str(sP1{i}{sol(i)}(:).') '] [' num2str(sP2{i}{sol(i)}(:).') '] -> ' num2str(nSP{i}(sol(i)),'%f') ]);
+end
+sumAvai= sumAvai/nFlows;
+fprintf('\n Average service availability: %f\n\n',sumAvai);
+fprintf('   Best load = %.2f\n',bestLoad);
