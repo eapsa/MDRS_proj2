@@ -143,9 +143,9 @@ end
 
 sumAvai = 0;
 for i=1:nFlows
-    nSP{i}(sol(i)) = 1-((1-nSP1{i}{sol(i)})*(1-nSP2{i}{sol(i)}));
-    sumAvai = sumAvai + nSP{i}(k);
-    disp(['[' num2str(sP1{i}{sol(i)}(:).') '] [' num2str(sP2{i}{sol(i)}(:).') '] -> ' num2str(nSP{i}(sol(i)),'%f') ]);
+    nSP{i}(bestSol(i)) = 1-((1-nSP1{i}{bestSol(i)})*(1-nSP2{i}{bestSol(i)}));
+    sumAvai = sumAvai + nSP{i}(bestSol(i));
+    disp(['[' num2str(sP1{i}{bestSol(i)}(:).') '] [' num2str(sP2{i}{bestSol(i)}(:).') '] -> ' num2str(nSP{i}(bestSol(i)),'%f') ]);
 end
 sumAvai= sumAvai/nFlows;
 fprintf('\n Average service availability: %f\n\n',sumAvai);
